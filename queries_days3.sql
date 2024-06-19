@@ -181,6 +181,89 @@ order by
     , d.name
 ;
 
+-- idem + seuil nb real 10
+select
+    d.id
+    , d.name
+    , count(m.id) as nb_directed_movie
+from 
+    person d 
+    join movie m on d.id = m.director_id
+group by
+    d.id, d.name
+having
+    count(m.id) >= 10
+order by 
+    nb_directed_movie desc
+    , d.name
+;
+-- idem + epoque 80-today
+select
+    d.id
+    , d.name
+    , count(m.id) as nb_directed_movie
+from 
+    person d 
+    join movie m on d.id = m.director_id
+where
+    m.year >= 1980
+group by
+    d.id, d.name
+having
+    count(m.id) >= 10
+order by 
+    nb_directed_movie desc
+    , d.name
+;
+
+--
+select
+    p.id 
+    , p.name
+    , count(m.id) as nb_directed_movie
+from 
+    person p 
+    left join movie m on p.id = m.director_id
+where
+    p.name like '% McQueen'
+group by
+    p.id 
+    , p.name
+order by 
+    nb_directed_movie desc
+    , p.name
+;
+
+select * from person where name like '% McQueen' order by name;
+
+-- date, time, ...
+select * from person; -- display date: 08/10/1943
+select
+    name
+    , birthdate
+   --  , year(birthdate)  -- ok sqlserver, postgresql, ...
+   , extract(year from birthdate) as birth_year -- oracle, postgresql, mariadb, ....
+from
+    person
+where 
+    extract(year from birthdate) = 1930
+;
+select
+    name
+    , birthdate
+   --  , year(birthdate)  -- ok sqlserver, postgresql, ...
+   , DATEPART(year, birthdate) as birth_year
+from
+    person
+where 
+    DATEPART(year, birthdate) = 1930
+;
+
+    
+    
+
+
+
 
 
 
